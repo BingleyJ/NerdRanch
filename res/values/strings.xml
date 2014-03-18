@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">bangban</string>
+    <string name="action_settings">Settings</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="next_button">Next</string>
+    <string name="menu_settings">Settings</string>
+    <string name="incorrect_toast">Incorrect!</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="question_leonardfight">Leonard Once lost a boxing match after being dared.</string>
+    <string name="question_pennyact">Penny has been the lead role in three films.</string>
+    <string name="question_rajdrink">Raj must be drunk to talk to women</string>
+    <string name="question_sheldonspace">Sheldon has been to outerspace.</string>
+    <string name="question_sheldonsmart">Sheldon is very smart.</string>
+    
+
+</resources>
