@@ -19,6 +19,7 @@ public class BangActivity extends Activity {
 	private TextView mQuestionScoreView;
 	private TextView mQuestionTextView;
     private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 			new TrueFalse(R.string.question_leonardfight, false),
@@ -108,10 +109,20 @@ public class BangActivity extends Activity {
 				updateQuestion();
 			}
 		});
-
+		
+		if (savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+		}
 		updateQuestion();
 		updateScore();
 	}
+	
+	 @Override
+	    public void onSaveInstanceState(Bundle savedInstanceState) {
+	        super.onSaveInstanceState(savedInstanceState);
+	        Log.i(TAG, "onSaveInstanceState");
+	        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+	    }
 	
 	@Override
     public void onStart() {
