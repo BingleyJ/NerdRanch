@@ -88,7 +88,7 @@ public class BangActivity extends Activity {
 			actionBar.setSubtitle("Big Bang Theory Quiz");
 		}
 		mAPIDevice = (TextView) findViewById(R.id.mapidevice);
-		String tempstr = "Device : " + Build.DEVICE +  " Version : "  + Build.VERSION.SDK;
+		String tempstr = "Device : " + Build.DEVICE +  " API level : "  + Build.VERSION.SDK;
 		mAPIDevice.setText(tempstr);
 		
 		mQuestionScoreView = (TextView) findViewById(R.id.mscore);
