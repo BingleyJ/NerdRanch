@@ -1,6 +1,9 @@
 package com.example.bangban;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
@@ -19,6 +22,7 @@ public class BangActivity extends Activity {
 	private ImageButton mNextButton;
 	private Button mCheatButton;
 	private TextView mQuestionScoreView;
+	private TextView mAPIDevice;
 	private TextView mQuestionTextView;
 	private static final String TAG = "QuizActivity";
 	private static final String KEY_INDEX = "index";
@@ -72,12 +76,21 @@ public class BangActivity extends Activity {
 		Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
 	}
 
+	@TargetApi(11)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate(Bundle) called");
 		setContentView(R.layout.activity_bang);
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			ActionBar actionBar = getActionBar();
+			actionBar.setSubtitle("Big Bang Theory Quiz");
+		}
+		mAPIDevice = (TextView) findViewById(R.id.mapidevice);
+		String tempstr = "Device : " + Build.DEVICE +  " Version : "  + Build.VERSION.SDK;
+		mAPIDevice.setText(tempstr);
+		
 		mQuestionScoreView = (TextView) findViewById(R.id.mscore);
 		mQuestionScoreView.setText(Integer.toString(mScore));
 
