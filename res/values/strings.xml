@@ -15,5 +15,9 @@
     <string name="question_rajdrink">Raj must be drunk to talk to women</string>
     <string name="question_sheldonspace">Sheldon has been to outerspace.</string>
     <string name="question_sheldonsmart">Sheldon is very smart.</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">See Answer</string>
+    <string name="judgment_toast">Cheating Sucks!</string>
 
 </resources>

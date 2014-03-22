@@ -2,6 +2,7 @@ package com.example.bangban;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -16,10 +17,11 @@ public class BangActivity extends Activity {
 	private Button mFalseButton;
 	private ImageButton mPrevButton;
 	private ImageButton mNextButton;
+	private Button mCheatButton;
 	private TextView mQuestionScoreView;
 	private TextView mQuestionTextView;
-    private static final String TAG = "QuizActivity";
-    private static final String KEY_INDEX = "index";
+	private static final String TAG = "QuizActivity";
+	private static final String KEY_INDEX = "index";
 
 	private TrueFalse[] mQuestionBank = new TrueFalse[] {
 			new TrueFalse(R.string.question_leonardfight, false),
@@ -31,28 +33,42 @@ public class BangActivity extends Activity {
 	private int mCurrentIndex = 0;
 	public int mScore = 0;
 
+	private boolean mIsCheater;
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (data == null) {
+			return;
+		}
+		mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN,
+				false);
+	}
+
 	private void updateQuestion() {
 		int question = mQuestionBank[mCurrentIndex].getQuestion();
 		mQuestionTextView.setText(question);
 	}
-	
+
 	private void updateScore() {
 		mQuestionScoreView.setText(Integer.toString(mScore));
 	}
-	
+
 	private void checkAnswer(boolean userPressedTrue) {
 		boolean answerIsTrue = mQuestionBank[mCurrentIndex].isTrueQuestion();
 
 		int messageResId = 0;
 
-		if (userPressedTrue == answerIsTrue) {
-			messageResId = R.string.correct_toast;
-			mScore = mScore + 100;
-			updateScore();
+		if (mIsCheater) {
+			messageResId = R.string.judgment_toast;
 		} else {
-			messageResId = R.string.incorrect_toast;
+			if (userPressedTrue == answerIsTrue) {
+				messageResId = R.string.correct_toast;
+				mScore = mScore + 100;
+				updateScore();
+			} else {
+				messageResId = R.string.incorrect_toast;
+			}
 		}
-
 		Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show();
 	}
 
@@ -64,7 +80,7 @@ public class BangActivity extends Activity {
 
 		mQuestionScoreView = (TextView) findViewById(R.id.mscore);
 		mQuestionScoreView.setText(Integer.toString(mScore));
-		
+
 		mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
 		mQuestionTextView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -81,7 +97,7 @@ public class BangActivity extends Activity {
 				checkAnswer(true);
 			}
 		});
-		
+
 		mFalseButton = (Button) findViewById(R.id.false_button);
 		mFalseButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -97,6 +113,7 @@ public class BangActivity extends Activity {
 				if (mCurrentIndex == 0)
 					mCurrentIndex = mQuestionBank.length;
 				mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
+				mIsCheater = false;
 				updateQuestion();
 			}
 		});
@@ -106,54 +123,67 @@ public class BangActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+				mIsCheater = false;
 				updateQuestion();
 			}
 		});
-		
+
 		if (savedInstanceState != null) {
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+			mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
 		}
+		mCheatButton = (Button) findViewById(R.id.cheat_button);
+		mCheatButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// Start CheatActivity
+				Intent i = new Intent(BangActivity.this, CheatActivity.class);
+				boolean answerIsTrue = mQuestionBank[mCurrentIndex]
+						.isTrueQuestion();
+				i.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+				startActivityForResult(i, 0);
+			}
+		});
 		updateQuestion();
 		updateScore();
 	}
-	
-	 @Override
-	    public void onSaveInstanceState(Bundle savedInstanceState) {
-	        super.onSaveInstanceState(savedInstanceState);
-	        Log.i(TAG, "onSaveInstanceState");
-	        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-	    }
-	
+
 	@Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart() called");
-    }
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+		Log.i(TAG, "onSaveInstanceState");
+		savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+	}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause() called");
-    }
-    
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called");
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		Log.d(TAG, "onStart() called");
+	}
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop() called");
-    }
+	@Override
+	public void onPause() {
+		super.onPause();
+		Log.d(TAG, "onPause() called");
+	}
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy() called");
-    }
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.d(TAG, "onResume() called");
+	}
 
+	@Override
+	public void onStop() {
+		super.onStop();
+		Log.d(TAG, "onStop() called");
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "onDestroy() called");
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
